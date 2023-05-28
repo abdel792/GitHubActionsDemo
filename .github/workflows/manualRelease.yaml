@@ -31,9 +31,14 @@ jobs:
       run: |
         echo "CUR_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
+    - name: Environment variable for tag_name
+      run: echo 'TAG_NAME=$(echo ${{ env.CUR_DATE  }} | cut -c 3-4).$(echo ${{ env.CUR_DATE  }} | cut -c -c 5-c)' >> $GITHUB_ENV
+
     - name: Environment variable for dev
       if: ${{ inputs.prerelease == true }}
-      run: echo 'MINOR_PATCH=1.0' >> $GITHUB_ENV
+      run: |
+        echo 'MINOR_PATCH=1.0' >> $GITHUB_ENV
+        echo 'TAG_NAME=${{ env.TAG_NAME }}-dev' >> $GITHUB_ENV
 
     - name: Environment variable for stable
       if: ${{ inputs.prerelease == false }}
@@ -50,6 +55,9 @@ jobs:
     - name: Check BUILD_VERSION environment variable
       run: echo '${{ env.BUILD_VERSION }}'
 
+
+    - name: Check TAG_NAME environment variable
+      run: echo '${{ env.TAG_NAME }}'
     - name: Checkout code
       uses: actions/checkout@v3
     - name: Set up Python 3.8
@@ -89,10 +97,10 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.event.inputs.version }}
         files: |
           *.nvda-addon
           sha256.txt
         generate_release_notes: true
         prerelease: ${{ github.event.inputs.prerelease }}
+        tag_name: ${{ env.TAG_NAME }}
         body: ${{ github.event.inputs.desc }}
