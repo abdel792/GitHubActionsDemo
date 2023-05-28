@@ -15,6 +15,7 @@ on:
       desc:
         description: 'Text communicating notable changes in this release, may contain Markdown markup'
         required: true
+        default: '[]'
 
 jobs:
   buildAndUpload:
