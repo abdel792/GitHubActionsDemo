@@ -22,14 +22,17 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Date formatting
       uses: ajilraju/actions-date@master #release v0.1
       with:
         args: date +%F
 
     - name: Environment variable for current date
-      run: |
-        echo "CUR_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+      run: echo "CUR_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
     - name: Environment variable for tag_name
       run: echo 'TAG_NAME=$(echo $CUR_DATE | cut -c 3-4).$(echo $CUR_DATE | cut -c 5-6)' >> $GITHUB_ENV
@@ -55,20 +58,20 @@ jobs:
     - name: Check BUILD_VERSION environment variable
       run: echo '${{ env.BUILD_VERSION }}'
 
-
     - name: Check TAG_NAME environment variable
       run: echo '${{ env.TAG_NAME }}'
-    - name: Checkout code
-      uses: actions/checkout@v3
+
     - name: Set up Python 3.8
       uses: actions/setup-python@v3
       with:
         python-version: 3.8
+
     - name: Install dependencies
       run: |
         pip install scons markdown
         sudo apt update
         sudo apt install gettext
+
     - name: Add add-on version
       run: |
         import re
@@ -80,6 +83,7 @@ jobs:
           f.write(text)
           f.truncate()
       shell: python 
+
     - name: Push changes
       run: |
         git config --global user.name github-actions
@@ -92,6 +96,7 @@ jobs:
 
     - name: Calculate sha256
       run: sha256sum *.nvda-addon >> sha256.txt
+
     - name: Release
       uses: softprops/action-gh-release@v1
       env:
