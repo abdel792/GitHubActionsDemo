@@ -23,6 +23,9 @@ jobs:
     permissions: write-all
     steps:
 
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Date formatting
       uses: ajilraju/actions-date@master #release v0.1
       with:
@@ -57,9 +60,6 @@ jobs:
 
     - name: Check TAG_NAME environment variable
       run: echo '${{ env.TAG_NAME }}'
-
-    - name: Checkout code
-      uses: actions/checkout@v3
 
     - name: Set up Python 3.8
       uses: actions/setup-python@v3
