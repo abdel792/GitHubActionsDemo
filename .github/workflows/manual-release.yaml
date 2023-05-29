@@ -91,7 +91,7 @@ jobs:
         git commit -a -m "Update buildVars"
         git tag ${{ env.TAG_NAME }}
         git push origin HEAD:main
-        git push origin ${{ env.TAG_NAME}:refs/tags/${{ env.TAG_NAME }}
+        git push origin ${{ env.TAG_NAME }}:refs/tags/${{ env.TAG_NAME }}
 
     - name: Build add-on
       run: scons version=${{ env.BUILD_VERSION }}
