@@ -13,7 +13,7 @@ on:
         required: false
         default: false
       desc:
-        description: 'Text communicating notable changes in this release, may contain Markdown markup'
+        description: 'Text communicating notable changes in this release, may contain Markdown markup. To describe multiple changes, please use syntax similar to this: ["- First change", "- Second change"]'
         required: true
         default: '[]'
 
@@ -31,11 +31,8 @@ jobs:
     - name: Environment variable for current date
       run: echo "CUR_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
-    - name: Checkout code
-      uses: actions/checkout@v3
-
     - name: Environment variable for tag_name
-      run: echo "TAG_NAME=$(echo ${{ env.CUR_DATE }} | cut -c 3-4)"."$(echo ${{ env.CUR_DATE }} | cut -c 5-6)" >> $GITHUB_ENV
+      run: echo 'TAG_NAME='v'$(echo ${{ env.CUR_DATE }} | cut -c 3-4)'.'$(echo ${{ env.CUR_DATE }} | cut -c 5-6)' >> $GITHUB_ENV
 
     - name: Environment variable for dev
       if: ${{ inputs.prerelease == true }}
@@ -60,6 +57,9 @@ jobs:
 
     - name: Check TAG_NAME environment variable
       run: echo '${{ env.TAG_NAME }}'
+
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.8
       uses: actions/setup-python@v3
