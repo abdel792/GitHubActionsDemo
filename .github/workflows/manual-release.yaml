@@ -35,7 +35,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Environment variable for tag_name
-      run: echo "TAG_NAME=$(echo $CUR_DATE | cut -c 3-4)"."$(echo $CUR_DATE | cut -c 5-6)" >> $GITHUB_ENV
+      run: echo "TAG_NAME=$(echo ${{ env.CUR_DATE }} | cut -c 3-4)"."$(echo ${{ env.CUR_DATE }} | cut -c 5-6)" >> $GITHUB_ENV
 
     - name: Environment variable for dev
       if: ${{ inputs.prerelease == true }}
