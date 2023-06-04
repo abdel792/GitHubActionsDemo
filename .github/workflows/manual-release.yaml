@@ -86,8 +86,8 @@ jobs:
 
     - name: Push changes
       run: |
-        git config --global user.name github-actions
-        git config --global user.email github-actions@github.com
+        git config --local user.name 'github-actions'
+        git config --local user.email 'github-actions@github.com'
         git commit -a -m "Update buildVars"
         git tag ${{ env.TAG_NAME }}
         git push origin HEAD:main
