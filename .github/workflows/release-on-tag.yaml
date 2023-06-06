@@ -56,12 +56,18 @@ jobs:
       run: |
         scons version=${{ env.CUR_DATE }}.${{ env.MINOR_PATCH }}
 
-    - name: Automatic release
-      uses: marvinpinto/action-automatic-releases@latest
+    - name: Calculate sha256
+      run: sha256sum *.nvda-addon >> sha256.txt
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        automatic_release_tag: ${{ github.ref_name }}
-        prerelease: ${{ env.PRE_RELEASE }}
-        title: ${{ env.RELEASE_TITLE }}
         files: |
           *.nvda-addon
+          sha256.txt
+        generate_release_notes: true
+        prerelease: ${{ env.PRE_RELEASE }}
+        tag_name: ${{ github.ref_name }}
+        body_path: 'changelog.md'

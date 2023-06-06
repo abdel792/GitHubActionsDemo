@@ -12,10 +12,6 @@ on:
         type: boolean
         required: false
         default: false
-      desc:
-        description: 'Text communicating notable changes in this release, may contain Markdown markup. To describe multiple changes, please use syntax similar to this: ["- First change", "- Second change"]'
-        required: true
-        default: '[]'
 
 jobs:
   buildAndUpload:
@@ -110,4 +106,4 @@ jobs:
         generate_release_notes: true
         prerelease: ${{ github.event.inputs.prerelease }}
         tag_name: ${{ env.TAG_NAME }}
-        body: ${{ github.event.inputs.desc }}
+        body_path: 'changelog.md'
